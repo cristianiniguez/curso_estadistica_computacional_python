@@ -18,6 +18,47 @@ def obtener_mano(baraja, tamanho_mano):
     return mano
 
 
+def obtener_conteo_valores(mano):
+    valores = []
+    for carta in mano:
+        valores.append(carta[1])
+    counter = dict(collections.Counter(valores))
+    return counter
+
+
+def contar_pares(manos):
+    pares = 0
+    for mano in manos:
+        conteo_valores = obtener_conteo_valores(mano)
+        for val in conteo_valores.values():
+            if val == 2:
+                pares += 1
+                break
+    return pares
+
+
+def contar_tercias(manos):
+    tercias = 0
+    for mano in manos:
+        conteo_valores = obtener_conteo_valores(mano)
+        for val in conteo_valores.values():
+            if val == 3:
+                tercias += 1
+                break
+    return tercias
+
+
+def contar_poquers(manos):
+    poquers = 0
+    for mano in manos:
+        conteo_valores = obtener_conteo_valores(mano)
+        for val in conteo_valores.values():
+            if val == 4:
+                poquers += 1
+                break
+    return poquers
+
+
 def main(tamanho_mano, intentos):
     baraja = crear_baraja()
 
@@ -26,35 +67,18 @@ def main(tamanho_mano, intentos):
         mano = obtener_mano(baraja, tamanho_mano)
         manos.append(mano)
 
-    pares = 0
-    tricas = 0
-    for mano in manos:
-        # obteniendo los valores de la mano
-        valores = []
-        for carta in mano:
-            valores.append(carta[1])
-
-        # contando cuantas veces salio cada valor
-        counter = dict(collections.Counter(valores))
-
-        # contando las manos que son par
-        for val in counter.values():
-            if val == 2:
-                pares += 1
-                break
-
-        # contando las manos que son trica
-        for val in counter.values():
-            if val == 3:
-                tricas += 1
-                break
+    pares = contar_pares(manos)
+    tercias = contar_tercias(manos)
+    poquers = contar_poquers(manos)
 
     probabilidad_par = pares / intentos
-    probabilidad_trica = tricas / intentos
+    probabilidad_tercia = tercias / intentos
+    probabilidad_poquer = poquers / intentos
 
     print(f"""
 Probabilidad de obtener un par en una mano de {tamanho_mano} carta(s) = {probabilidad_par}
-Probabilidad de obtener una trica en una mano de {tamanho_mano} carta(s) = {probabilidad_trica}
+Probabilidad de obtener una tercia en una mano de {tamanho_mano} carta(s) = {probabilidad_tercia}
+Probabilidad de obtener una poquer en una mano de {tamanho_mano} carta(s) = {probabilidad_poquer}
     """)
 
 
